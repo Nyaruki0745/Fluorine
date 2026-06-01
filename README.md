@@ -18,7 +18,7 @@
 
 1. [Firebase Console](https://console.firebase.google.com) にアクセス
 2. 「プロジェクトを追加」をクリック
-3. プロジェクト名を入力（例: `school-discussion`）して作成
+3. プロジェクト名を入力（例: `Fluorine`）して作成
 
 ### 2. Authentication の設定
 
