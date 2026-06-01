@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ヘルパー関数
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
+    function isProjectOwner(projectId) {
+      let project = get(/databases/$(database)/documents/projects/$(projectId));
+      return isLoggedIn() && project.data.ownerId == request.auth.uid;
+    }
+
+    function isMember(projectId) {
+      let project = get(/databases/$(database)/documents/projects/$(projectId));
+      return isLoggedIn() && project.data.members.hasAny([{'uid': request.auth.uid}]);
+    }
+
+    // ========== プロジェクト ==========
+    match /projects/{projectId} {
+      // 誰でも読める（コードで検索するため）
+      allow read: if true;
+      // ログインユーザーのみ作成
+      allow create: if isLoggedIn();
+      // オーナーのみ更新
+      allow update: if isProjectOwner(projectId);
+      allow delete: if isProjectOwner(projectId);
+    }
+
+    // ========== スレッド ==========
+    match /threads/{threadId} {
+      allow read: if true;
+      allow create: if true; // 権限チェックはアプリ側で行う
+      allow update: if true; // 状態変更はアプリ側で権限チェック済み
+      allow delete: if isLoggedIn();
+    }
+
+    // ========== コメント ==========
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if true; // 権限チェックはアプリ側で行う
+      allow update: if isLoggedIn() && resource.data.authorId == request.auth.uid;
+      allow delete: if isLoggedIn() && resource.data.authorId == request.auth.uid;
+    }
+  }
+}
