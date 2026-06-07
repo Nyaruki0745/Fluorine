@@ -79,6 +79,10 @@ export const removeMemberFromProject = async (projectId, uid) => {
   await updateDoc(projRef, { members })
 }
 
+export const deleteProject = async (projectId) => {
+  await deleteDoc(doc(db, 'projects', projectId))
+}
+
 // ========== スレッド ==========
 
 export const createThread = async (projectId, title, authorId, authorName, parentId = null) => {
