@@ -2,14 +2,13 @@ import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
-// GitHub Secrets / .env.local から読み込む
 const firebaseConfig = {
-  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId:             import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: "AIzaSyCCWO2yE3MWnBEah27tHRCsB6kZ9uFQAbU",
+  authDomain: "fluorine-c64c4.firebaseapp.com",
+  projectId: "fluorine-c64c4",
+  storageBucket: "fluorine-c64c4.firebasestorage.app",
+  messagingSenderId: "1089344500802",
+  appId: "1:1089344500802:web:6abf80e9461b06a7fb29db",
 }
 
 const app = initializeApp(firebaseConfig)
