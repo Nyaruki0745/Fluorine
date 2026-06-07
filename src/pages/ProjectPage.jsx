@@ -3,7 +3,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import {
   subscribeProject, subscribeThreads, createThread,
-  updateProjectPermissions, updateMemberPermissions, removeMemberFromProject
+  updateProjectPermissions, updateMemberPermissions, removeMemberFromProject,
+  deleteProject
 } from '../lib/firestore'
 import { getEffectivePermissions } from '../lib/permissions'
 import Header from '../components/Header'
@@ -29,6 +30,8 @@ export default function ProjectPage() {
   const [creating, setCreating] = useState(false)
   const [tab, setTab] = useState('open') // 'open' | 'resolved'
   const [showSettings, setShowSettings] = useState(false)
+  const [showDelete, setShowDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const guestName = sessionStorage.getItem('guestName')
   const isJoined = user || sessionStorage.getItem(`joined_${projectId}`)
@@ -70,6 +73,16 @@ export default function ProjectPage() {
   const openCount = threads.filter(t => t.status === 'open').length
   const resolvedCount = threads.filter(t => t.status === 'resolved').length
 
+  const handleDeleteProject = async () => {
+    setDeleting(true)
+    try {
+      await deleteProject(projectId)
+      nav('/dashboard')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   const handleCreateThread = async (e) => {
     e.preventDefault()
     if (!threadTitle.trim()) return
@@ -106,7 +119,10 @@ export default function ProjectPage() {
               {project.code}
             </div>
             {perms.isOwner && (
-              <button className="btn btn-ghost btn-sm" onClick={() => setShowSettings(true)}>⚙ 設定</button>
+              <>
+                <button className="btn btn-ghost btn-sm" onClick={() => setShowSettings(true)}>⚙ 設定</button>
+                <button className="btn btn-danger btn-sm" onClick={() => setShowDelete(true)}>🗑 削除</button>
+              </>
             )}
           </div>
         </div>
@@ -186,6 +202,24 @@ export default function ProjectPage() {
           project={project}
           onClose={() => setShowSettings(false)}
         />
+      )}
+
+      {/* 削除確認モーダル */}
+      {showDelete && (
+        <div className="modal-overlay" onClick={e => e.target === e.currentTarget && setShowDelete(false)}>
+          <div className="modal" style={{ width: 'min(400px, 94vw)' }}>
+            <div className="modal-title">プロジェクトを削除しますか？</div>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '1.5rem', lineHeight: 1.7 }}>
+              「<strong style={{ color: 'var(--text)' }}>{project.title}</strong>」を削除します。この操作は取り消せません。
+            </p>
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+              <button className="btn btn-ghost" onClick={() => setShowDelete(false)} disabled={deleting}>キャンセル</button>
+              <button className="btn btn-danger" onClick={handleDeleteProject} disabled={deleting}>
+                {deleting ? '削除中...' : '削除する'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   )
