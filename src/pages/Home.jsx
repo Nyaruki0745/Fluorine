@@ -9,9 +9,9 @@ export default function Home() {
       <Header />
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 56px)', padding: '2rem', textAlign: 'center' }}>
         <div style={{ maxWidth: 540 }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent)', marginBottom: '1rem', letterSpacing: '0.1em' }}>SCHOOL DISCUSSION SYSTEM</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent)', marginBottom: '1rem', letterSpacing: '0.1em' }}>PROJECT DISCUSSION SYSTEM</div>
           <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 700, lineHeight: 1.2, marginBottom: '1rem' }}>
-            プロジェクトに関することを<br />みんなで話し合う
+            最善の解決策を<br />みんなで話し合う
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '1rem', marginBottom: '2.5rem', lineHeight: 1.8 }}>
             プロジェクトを作成して議題を立て、<br />
