@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header className="header">
-      <Link to="/" className="header-logo">議論ボード</Link>
+      <Link to="/" className="header-logo">Fluorine</Link>
       <div className="header-spacer" />
       {user ? (
         <>
